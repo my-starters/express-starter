@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
-const utils = require("./commons/utils");
+const utils = require("./commons/functions");
 
 const makeApp = ({ port = config.defaultPort }) => {
     const app = express();
@@ -17,7 +17,7 @@ const makeApp = ({ port = config.defaultPort }) => {
             optionsSuccessStatus: 200
         }
     ));
-    app.use(express.static("src/public"));
+    app.use(express.static("public"));
     const limiter = rateLimit({
         windowMs: 1 * 60 * 1000,
         max: config.numberOfMaxApiRequestsPerMin,
@@ -29,7 +29,7 @@ const makeApp = ({ port = config.defaultPort }) => {
     app.use(helmet.hidePoweredBy());
     app.use(express.json());
     app.get("/", (req, res) => {
-        res.status(404).json(utils.createSingleResponse("Welcome!"));
+        res.status(200).json(utils.createSingleResponse("Welcome!"));
     })
     app.use("*", (req, res) => {
         res.status(404).json(utils.createSingleResponse("Path_Not_Found"));
